@@ -1,0 +1,43 @@
+.cart-container {
+  padding: 30px;
+}
+
+.cart-card {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  padding: 20px 0;
+}
+
+.cart-card img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.cart-details {
+  margin-left: 30px;
+}
+
+.quantity-controls button {
+  width: 35px;
+  height: 35px;
+  margin: 0 10px;
+}
+
+.delete-btn {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.cart-actions button {
+  background: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  margin: 15px;
+  border: none;
+  cursor: pointer;
+}
