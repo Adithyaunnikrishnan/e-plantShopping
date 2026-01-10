@@ -1,11 +1,25 @@
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addItem, removeItem, updateQuantity } from "./CartSlice";
+import { removeItem, updateQuantity } from "./CartSlice";
 import { useNavigate } from "react-router-dom";
 
-export default function CartItem() {
-  const cartItems = useSelector((state) => state.cart.items);
+const CartItem = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cartItems = useSelector((state) => state.cart.items);
+
+  // Calculate subtotal for a single item
+  const calculateItemTotal = (item) => {
+    const price = parseFloat(item.cost.substring(1));
+    return price * item.quantity;
+  };
+
+  // Calculate total cart amount
+  const calculateTotalAmount = () => {
+    return cartItems.reduce((total, item) => {
+      return total + calculateItemTotal(item);
+    }, 0);
+  };
 
   const handleIncrement = (item) => {
     dispatch(
@@ -34,24 +48,49 @@ export default function CartItem() {
   };
 
   const handleContinueShopping = () => {
-    navigate("/plants");
+    navigate("/products");
+  };
+
+  const handleCheckoutShopping = () => {
+    alert("Checkout functionality coming soon!");
   };
 
   return (
-    <div>
-      {cartItems.map((item) => (
-        <div key={item.name}>
-          <h3>{item.name}</h3>
-          <button onClick={() => handleDecrement(item)}>-</button>
-          {item.quantity}
-          <button onClick={() => handleIncrement(item)}>+</button>
-          <button onClick={() => handleRemove(item)}>Delete</button>
-        </div>
-      ))}
+    <div className="cart-container">
+      <h1>Shopping Cart</h1>
 
-      <button onClick={handleContinueShopping}>
-        Continue Shopping
-      </button>
+      {cartItems.length === 0 ? (
+        <p>Your cart is empty</p>
+      ) : (
+        <>
+          {cartItems.map((item) => (
+            <div className="cart-item" key={item.name}>
+              <img src={item.image} alt={item.name} width="100" />
+              <div>
+                <h3>{item.name}</h3>
+                <p>Unit Price: {item.cost}</p>
+                <p>Quantity: {item.quantity}</p>
+                <p>
+                  Subtotal: ${calculateItemTotal(item).toFixed(2)}
+                </p>
+
+                <button onClick={() => handleIncrement(item)}>+</button>
+                <button onClick={() => handleDecrement(item)}>-</button>
+                <button onClick={() => handleRemove(item)}>Remove</button>
+              </div>
+            </div>
+          ))}
+
+          <h2>Total Amount: ${calculateTotalAmount().toFixed(2)}</h2>
+
+          <button onClick={handleContinueShopping}>
+            Continue Shopping
+          </button>
+          <button onClick={handleCheckoutShopping}>Checkout</button>
+        </>
+      )}
     </div>
   );
-}
+};
+
+export default CartItem;
